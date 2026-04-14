@@ -9,11 +9,15 @@ import 'screens/home_screen.dart';
 import 'screens/stats_screen.dart';
 import 'screens/history_screen.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final faithProvider = FaithProvider();
+  await faithProvider.initialize();
+
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => FaithProvider()),
+        ChangeNotifierProvider<FaithProvider>.value(value: faithProvider),
       ],
       child: const HisSoldierApp(),
     ),
@@ -142,7 +146,17 @@ class _MainLayoutState extends State<MainLayout> {
                       ],
                     ),
                     GestureDetector(
-                      onTap: () => Navigator.pop(context),
+                      onTap: () {
+                        // Auto-save on manual close
+                        FaithRecord up = record;
+                        if (memoKey == 'wordMemo') up = up.copyWith(wordMemo: _controller.text);
+                        if (memoKey == 'prayerMemo') up = up.copyWith(prayerMemo: _controller.text);
+                        if (memoKey == 'fellowshipMemo') up = up.copyWith(fellowshipMemo: _controller.text);
+                        if (memoKey == 'evangelismMemo') up = up.copyWith(evangelismMemo: _controller.text);
+                        
+                        Provider.of<FaithProvider>(context, listen: false).updateRecord(up);
+                        Navigator.pop(context, up);
+                      },
                       child: Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
@@ -151,8 +165,8 @@ class _MainLayoutState extends State<MainLayout> {
                               : const Color(0xFFF1F5F9),
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(LucideIcons.x,
-                            size: 20, color: Color(0xFF64748B)),
+                        child: const Icon(LucideIcons.check,
+                            size: 20, color: Color(0xFF3B82F6)),
                       ),
                     ),
                   ],
@@ -190,71 +204,15 @@ class _MainLayoutState extends State<MainLayout> {
                   ),
                 ),
                 const SizedBox(height: 24),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: GestureDetector(
-                        onTap: () => Navigator.pop(context),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: isDark
-                                ? const Color(0xFF1E293B)
-                                : const Color(0xFFF1F5F9),
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: Text('취소',
-                              style: TextStyle(
-                                  color: isDark
-                                      ? const Color(0xFFCBD5E1)
-                                      : const Color(0xFF475569),
-                                  fontWeight: FontWeight.bold)),
-                        ),
-                      ),
+                Center(
+                  child: Text(
+                    '닫으면 자동으로 저장됩니다',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: isDark ? const Color(0xFF475569) : const Color(0xFF94A3B8),
+                      fontWeight: FontWeight.bold
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      flex: 2,
-                      child: GestureDetector(
-                        onTap: () {
-                          FaithRecord up = record;
-                          if (memoKey == 'wordMemo')
-                            up = up.copyWith(wordMemo: _controller.text);
-                          if (memoKey == 'prayerMemo')
-                            up = up.copyWith(prayerMemo: _controller.text);
-                          if (memoKey == 'fellowshipMemo')
-                            up = up.copyWith(fellowshipMemo: _controller.text);
-                          if (memoKey == 'evangelismMemo')
-                            up = up.copyWith(evangelismMemo: _controller.text);
-
-                          Provider.of<FaithProvider>(context, listen: false)
-                              .updateRecord(up);
-                          Navigator.pop(
-                              context, up); // Return updated record if needed
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF3B82F6),
-                            borderRadius: BorderRadius.circular(16),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: const Color(0xFFBFDBFE),
-                                  blurRadius: 15,
-                                  offset: const Offset(0, 5)),
-                            ],
-                          ),
-                          child: const Text('기록 완료',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold)),
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ],
             ),
@@ -290,6 +248,8 @@ class _MainLayoutState extends State<MainLayout> {
                       record =
                           record.copyWith(isEvangelism: !record.isEvangelism);
                   });
+                  // Auto-save on every toggle
+                  Provider.of<FaithProvider>(context, listen: false).updateRecord(record);
                 },
                 child: Container(
                   margin: const EdgeInsets.only(bottom: 16),
@@ -425,11 +385,27 @@ class _MainLayoutState extends State<MainLayout> {
                     ),
                   ),
                   const SizedBox(height: 32),
-                  Text(
-                    DateFormat('M월 d일 기록 수정', 'ko')
-                        .format(DateTime.parse(record.date)),
-                    style: const TextStyle(
-                        fontSize: 24, fontWeight: FontWeight.bold),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        DateFormat('M월 d일 기록 수정', 'ko')
+                            .format(DateTime.parse(record.date)),
+                        style: const TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
+                      GestureDetector(
+                        onTap: () => Navigator.pop(context),
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: isDark ? const Color(0xFF1E293B) : const Color(0xFFF1F5F9),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(LucideIcons.check, size: 20, color: Color(0xFF3B82F6)),
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 24),
                   buildEditRow('말씀', LucideIcons.bookOpen, 'isWord',
@@ -440,32 +416,15 @@ class _MainLayoutState extends State<MainLayout> {
                       record.isFellowship, record.fellowshipMemo),
                   buildEditRow('전도', LucideIcons.send, 'isEvangelism',
                       record.isEvangelism, record.evangelismMemo),
-                  const SizedBox(height: 8),
-                  GestureDetector(
-                    onTap: () {
-                      Provider.of<FaithProvider>(context, listen: false)
-                          .updateRecord(record);
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF3B82F6),
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: [
-                          BoxShadow(
-                              color: const Color(0xFFBFDBFE),
-                              blurRadius: 15,
-                              offset: const Offset(0, 5)),
-                        ],
+                  const SizedBox(height: 16),
+                  Center(
+                    child: Text(
+                      '변경사항은 즉시 저장됩니다',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: isDark ? const Color(0xFF475569) : const Color(0xFF94A3B8),
+                        fontWeight: FontWeight.bold
                       ),
-                      child: const Text('저장하기',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold)),
                     ),
                   ),
                 ],
@@ -481,6 +440,19 @@ class _MainLayoutState extends State<MainLayout> {
   Widget build(BuildContext context) {
     bool isDark = Theme.of(context).brightness == Brightness.dark;
     final faithProvider = Provider.of<FaithProvider>(context);
+
+    if (!faithProvider.isLoaded) {
+      return Scaffold(
+        backgroundColor:
+            isDark ? const Color(0xFF020617) : const Color(0xFFF8FAFC),
+        body: const Center(
+          child: CircularProgressIndicator(
+            color: Color(0xFF3B82F6),
+          ),
+        ),
+      );
+    }
+
     final todayRecord = faithProvider.getRecordForDate(DateTime.now());
 
     Widget currentScreen;
