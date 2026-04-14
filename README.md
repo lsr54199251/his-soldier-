@@ -1,16 +1,64 @@
-# project
+# His Soldier (그리스도의 군사) 🛡️
 
-A new Flutter project.
+'수레바퀴의 삶(The Wheel Illustration)' 원리에 기초한 영적 훈련 기록 애플리케이션
 
-## Getting Started
+## 💡 개발 동기 (Why 'His Soldier'?)
+본 애플리케이션은 **디모데후서 2장 3절**("너는 그리스도 예수의 좋은 병사로 나와 함께 고난을 받으라")의 말씀을 바탕으로, 그리스도의 군사된 성도가 매일의 영적 전투에서 승리하도록 돕기 위해 개발되었습니다.
 
-This project is a starting point for a Flutter application.
+건강한 영적 성장을 위해 반드시 필요한 4가지 핵심 요소를 **'말씀, 기도, 교제, 전도'**로 정의하고, 이를 체계적으로 기록함으로써 삶의 중심에 예수 그리스도를 모시는 것을 목적으로 합니다.
 
-A few resources to get you started if this is your first Flutter project:
+## 📖 성경적 근거와 배경 (The Biblical Foundation)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### 1. 말씀 (The Word)
+**왜 말씀인가?** 말씀은 영혼의 양식이자 영적 전쟁의 유일한 공격 무기입니다.
+*   **성경적 답변**: 
+    *   "주의 말씀은 내 발에 등이요 내 길에 빛이니이다" (시편 119:105)
+    *   "구원의 투구와 성령의 검 곧 하나님의 말씀을 가지라" (에베소서 6:17)
+*   **기록의 이유**: 매일의 묵상을 기록함으로 하나님이 주신 음성을 잊지 않고 삶의 이정표로 삼기 위함입니다.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### 2. 기도 (Prayer)
+**왜 기도인가?** 기도는 하나님과의 호흡이며, 우리의 무능함을 인정하고 하나님의 주권을 신뢰하는 행위입니다.
+*   **성경적 답변**:
+    *   "쉬지 말고 기도하라" (데살로니가전서 5:17)
+    *   "아무 것도 염려하지 말고 다만 모든 일에 기도와 간구로... 하나님께 아뢰라" (빌립보서 4:6)
+*   **기록의 이유**: 기도 제목을 기록하고 나중에 응답의 역사를 확인하며 감사의 제목을 찾기 위함입니다.
+
+### 3. 교제 (Fellowship)
+**왜 교제인가?** 성도는 그리스도의 몸 된 교회의 지체로서 서로 연결되어 있을 때 건강하게 성장합니다.
+*   **성경적 답변**:
+    *   "서로 돌아보아 사랑과 선행을 격려하며 모이기를 폐하는 어떤 사람들의 습관과 같이 하지 말고..." (히브리서 10:24-25)
+*   **기록의 이유**: 지체들과 나눈 사랑과 격려, 중보의 내용을 기록하며 공동체 안에서 함께 성장하기 위함입니다.
+
+### 4. 전도 (Evangelism)
+**왜 전도인가?** 전도는 주님이 우리에게 주신 지상 최대의 명령이자 교회의 존재 이유입니다.
+*   **성경적 답변**:
+    *   "너는 말씀을 전파하라 때를 얻든지 못 얻든지 항상 힘쓰라" (디모데후서 4:2)
+    *   "그러므로 너희는 가서 모든 민족을 제자로 삼아..." (마태복음 28:19)
+*   **기록의 이유**: 전도 대상자를 향한 마음을 잊지 않고, 복음의 씨앗을 뿌리는 과정을 추적하며 한 영혼을 향한 하나님의 사랑을 실천하기 위함입니다.
+
+## ✨ 주요 기능 (Key Features)
+- **매일의 기록**: 말씀, 기도, 교제, 전도 4개 항목에 대한 실천 여부 체크 및 상세 메모 작성
+- **자동 저장**: 별도의 저장 버튼 없이 실천 항목을 탭하거나 메모 창을 닫으면 즉시 로컬 저장소에 저장
+- **통계 및 리포트**: 훈련 달성도 추이를 한눈에 볼 수 있는 차트와 히트맵 제공
+- **히스토리 관리**: 달력을 통해 과거의 기록을 쉽게 찾아보고 수정 가능
+- **다크 모드 지원**: 사용자의 눈 피로를 덜어주는 수려한 다크 모드 UI 제공
+
+## 🛠 기술 스택 (Technical Stack)
+- **Framework**: Flutter (Dart)
+- **State Management**: Provider
+- **Local Persistence**: SharedPreferences
+- **UI Architecture**: MVVM (Model-View-ViewModel) logic with Provider
+- **Key Packages**:
+  - `lucide_icons`: 현대적이고 간결한 아이콘 시스템
+  - `fl_chart`: 영적 성장 시각화를 위한 고품질 차트 라이브러리
+  - `intl`: 다국어 및 날짜 형식 처리
+  - `uuid`: 고유 식별자 생성
+
+## 🚀 시작하기
+```bash
+# 종속성 설치
+flutter pub get
+
+# 앱 실행
+flutter run
+```

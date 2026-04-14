@@ -1,15 +1,19 @@
 allprojects {
     repositories {
+        maven { url "http://maven.aliyun.com/repository/google/"; allowInsecureProtocol = true }
+        maven { url "http://maven.aliyun.com/repository/public/"; allowInsecureProtocol = true }
         google()
         mavenCentral()
+    }
+    tasks.withType(JavaCompile).configureEach {
+        options.release.set(null)
+        options.compilerArgs << '-Xlint:-options'
     }
 }
 
 rootProject.buildDir = "../build"
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
-}
-subprojects {
     project.evaluationDependsOn(":app")
 }
 

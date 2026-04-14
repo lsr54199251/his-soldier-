@@ -37,7 +37,14 @@ app.*.symbols
 # Obfuscation related
 app.*.map.json
 
+# User defined
+*.zip
+*.txt
+*.lock
+flutter_out.txt
+
 # Android Studio will place build artifacts here
 /android/app/debug
 /android/app/profile
 /android/app/release
+/android/gradle-*/
