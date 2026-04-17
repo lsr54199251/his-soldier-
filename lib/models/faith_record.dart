@@ -1,3 +1,33 @@
+class CheckItem {
+  final String id;
+  final String text;
+  final bool completed;
+
+  const CheckItem({
+    required this.id,
+    required this.text,
+    this.completed = false,
+  });
+
+  CheckItem copyWith({String? id, String? text, bool? completed}) {
+    return CheckItem(
+      id: id ?? this.id,
+      text: text ?? this.text,
+      completed: completed ?? this.completed,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {'id': id, 'text': text, 'completed': completed};
+
+  factory CheckItem.fromJson(Map<String, dynamic> json) {
+    return CheckItem(
+      id: json['id'] as String,
+      text: json['text'] as String,
+      completed: json['completed'] as bool? ?? false,
+    );
+  }
+}
+
 class FaithRecord {
   final String id;
   final String date; // YYYY-MM-DD
@@ -9,6 +39,7 @@ class FaithRecord {
   final String? prayerMemo;
   final String? fellowshipMemo;
   final String? evangelismMemo;
+  final List<CheckItem> todos;
 
   FaithRecord({
     required this.id,
@@ -21,6 +52,7 @@ class FaithRecord {
     this.prayerMemo,
     this.fellowshipMemo,
     this.evangelismMemo,
+    this.todos = const [],
   });
 
   FaithRecord copyWith({
@@ -34,6 +66,7 @@ class FaithRecord {
     String? prayerMemo,
     String? fellowshipMemo,
     String? evangelismMemo,
+    List<CheckItem>? todos,
   }) {
     return FaithRecord(
       id: id ?? this.id,
@@ -46,6 +79,7 @@ class FaithRecord {
       prayerMemo: prayerMemo ?? this.prayerMemo,
       fellowshipMemo: fellowshipMemo ?? this.fellowshipMemo,
       evangelismMemo: evangelismMemo ?? this.evangelismMemo,
+      todos: todos ?? this.todos,
     );
   }
 
@@ -61,10 +95,15 @@ class FaithRecord {
       'prayerMemo': prayerMemo,
       'fellowshipMemo': fellowshipMemo,
       'evangelismMemo': evangelismMemo,
+      'todos': todos.map((t) => t.toJson()).toList(),
     };
   }
 
   factory FaithRecord.fromJson(Map<String, dynamic> json) {
+    final rawTodos = json['todos'];
+    final todos = rawTodos is List
+        ? rawTodos.map((e) => CheckItem.fromJson(e as Map<String, dynamic>)).toList()
+        : <CheckItem>[];
     return FaithRecord(
       id: json['id'] as String,
       date: json['date'] as String,
@@ -76,6 +115,7 @@ class FaithRecord {
       prayerMemo: json['prayerMemo'] as String?,
       fellowshipMemo: json['fellowshipMemo'] as String?,
       evangelismMemo: json['evangelismMemo'] as String?,
+      todos: todos,
     );
   }
 
