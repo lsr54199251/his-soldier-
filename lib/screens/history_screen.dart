@@ -174,9 +174,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Widget _buildDayCell(bool isDark, DateTime date, bool isToday) {
     String dateStr = DateFormat('yyyy-MM-dd').format(date);
     double rate = 0.0;
+    bool hasTodos = false;
     try {
       final record = widget.records.firstWhere((r) => r.date == dateStr);
       rate = record.completionRate;
+      hasTodos = record.todos.isNotEmpty;
     } catch (_) {}
 
     Color bgColor = isDark ? const Color(0xFF1E293B) : Colors.white;
@@ -226,15 +228,29 @@ class _HistoryScreenState extends State<HistoryScreen> {
             )
           ] : [],
         ),
-        child: Center(
-          child: Text(
-            date.day.toString(),
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: rate > 0 || isToday ? FontWeight.w900 : FontWeight.w600,
-              color: textColor,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              date.day.toString(),
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: rate > 0 || isToday ? FontWeight.w900 : FontWeight.w600,
+                color: textColor,
+              ),
             ),
-          ),
+            if (hasTodos)
+              Text(
+                '○',
+                style: TextStyle(
+                  fontSize: 8,
+                  fontWeight: FontWeight.bold,
+                  color: isToday ? const Color(0xFF3B82F6) : textColor,
+                ),
+              ),
+            if (!hasTodos)
+              const SizedBox(height: 8), // Placeholder to keep height consistent
+          ],
         ),
       ),
     );
