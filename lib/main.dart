@@ -9,6 +9,7 @@ import 'models/faith_record.dart';
 import 'screens/home_screen.dart';
 import 'screens/stats_screen.dart';
 import 'screens/history_screen.dart';
+import 'screens/prayer_journal_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -474,6 +475,8 @@ class _MainLayoutState extends State<MainLayout> {
         onMemoOpen: (keyStr, record) => _showMemoBottomSheet(record, keyStr),
       );
     } else if (_currentIndex == 1) {
+      currentScreen = const PrayerJournalScreen();
+    } else if (_currentIndex == 2) {
       currentScreen = StatsScreen(records: faithProvider.records);
     } else {
       currentScreen = HistoryScreen(
@@ -544,8 +547,9 @@ class _MainLayoutState extends State<MainLayout> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           _buildNavItem(0, LucideIcons.home, '홈', isDark),
-          _buildNavItem(1, LucideIcons.barChart2, '통계', isDark),
-          _buildNavItem(2, LucideIcons.history, '히스토리', isDark),
+          _buildNavItem(1, LucideIcons.book, '기도수첩', isDark),
+          _buildNavItem(2, LucideIcons.barChart2, '통계', isDark),
+          _buildNavItem(3, LucideIcons.history, '히스토리', isDark),
         ],
       ),
     );

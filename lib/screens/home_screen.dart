@@ -28,6 +28,8 @@ class _HomeScreenState extends State<HomeScreen> {
   late DateTime _selectedDate;
   final TextEditingController _todoController = TextEditingController();
   final FocusNode _todoFocus = FocusNode();
+  final TextEditingController _bibleController = TextEditingController();
+  final FocusNode _bibleFocus = FocusNode();
 
   @override
   void initState() {
@@ -35,6 +37,15 @@ class _HomeScreenState extends State<HomeScreen> {
     initializeDateFormatting('ko', null);
     _record = widget.record;
     _selectedDate = DateTime.parse(_record.date);
+    _bibleController.text = _record.bibleMemo ?? '';
+    
+    _bibleFocus.addListener(() {
+      if (!_bibleFocus.hasFocus) {
+        if (_record.bibleMemo != _bibleController.text) {
+          widget.onUpdate(_record.copyWith(bibleMemo: _bibleController.text));
+        }
+      }
+    });
   }
 
   @override
@@ -43,6 +54,9 @@ class _HomeScreenState extends State<HomeScreen> {
     if (oldWidget.record != widget.record) {
       _record = widget.record;
       _selectedDate = DateTime.parse(_record.date);
+      if (!_bibleFocus.hasFocus) {
+        _bibleController.text = _record.bibleMemo ?? '';
+      }
     }
   }
 
@@ -50,6 +64,8 @@ class _HomeScreenState extends State<HomeScreen> {
   void dispose() {
     _todoController.dispose();
     _todoFocus.dispose();
+    _bibleController.dispose();
+    _bibleFocus.dispose();
     super.dispose();
   }
 
@@ -178,7 +194,13 @@ class _HomeScreenState extends State<HomeScreen> {
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 20, 20, 12),
-                child: _buildHeader(isDark),
+                child: Column(
+                  children: [
+                    _buildHeader(isDark),
+                    const SizedBox(height: 16),
+                    _buildBibleMemo(isDark),
+                  ],
+                ),
               ),
             ),
             SliverPadding(
@@ -234,6 +256,116 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildBibleMemo(bool isDark) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF1E293B) : Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: isDark ? const Color(0xFF334155) : const Color(0xFFF1F5F9),
+        ),
+        boxShadow: [
+          if (!isDark)
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+              offset: const Offset(0, 2),
+            )
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: isDark
+                      ? const Color(0xFF1E3A8A).withOpacity(0.4)
+                      : const Color(0xFFDBEAFE),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Icon(LucideIcons.bookOpen,
+                    size: 16, color: Color(0xFF3B82F6)),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                '성경 암송',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w900,
+                  color: isDark ? Colors.white : const Color(0xFF0F172A),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          TextField(
+            controller: _bibleController,
+            focusNode: _bibleFocus,
+            maxLines: null,
+            style: TextStyle(
+              fontSize: 14,
+              color: isDark ? Colors.white : const Color(0xFF0F172A),
+            ),
+            decoration: InputDecoration(
+              hintText: '오늘 암송할 말씀을 적어보세요...',
+              hintStyle: const TextStyle(color: Color(0xFF94A3B8), fontSize: 13),
+              filled: true,
+              fillColor: isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+                borderSide: BorderSide(
+                  color: isDark ? const Color(0xFF334155) : const Color(0xFFF1F5F9),
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+                borderSide: BorderSide(
+                  color: isDark ? const Color(0xFF334155) : const Color(0xFFF1F5F9),
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+                borderSide: const BorderSide(color: Color(0xFF3B82F6), width: 2),
+              ),
+              suffixIcon: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: Icon(LucideIcons.x, size: 16, color: isDark ? const Color(0xFF64748B) : const Color(0xFF94A3B8)),
+                    onPressed: () {
+                      _bibleController.clear();
+                      widget.onUpdate(_record.copyWith(bibleMemo: ''));
+                    },
+                  ),
+                  IconButton(
+                    icon: const Icon(LucideIcons.check, size: 16, color: Color(0xFF3B82F6)),
+                    onPressed: () {
+                       _bibleFocus.unfocus();
+                       widget.onUpdate(_record.copyWith(bibleMemo: _bibleController.text));
+                       ScaffoldMessenger.of(context).showSnackBar(
+                         SnackBar(
+                           content: const Text('암송 구절이 저장되었습니다.'),
+                           behavior: SnackBarBehavior.floating,
+                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                           duration: const Duration(seconds: 2),
+                         ),
+                       );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
