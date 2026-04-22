@@ -39,6 +39,7 @@ class FaithRecord {
   final String? prayerMemo;
   final String? fellowshipMemo;
   final String? evangelismMemo;
+  final String? bibleMemo;
   final List<CheckItem> todos;
 
   FaithRecord({
@@ -52,6 +53,7 @@ class FaithRecord {
     this.prayerMemo,
     this.fellowshipMemo,
     this.evangelismMemo,
+    this.bibleMemo,
     this.todos = const [],
   });
 
@@ -66,6 +68,7 @@ class FaithRecord {
     String? prayerMemo,
     String? fellowshipMemo,
     String? evangelismMemo,
+    String? bibleMemo,
     List<CheckItem>? todos,
   }) {
     return FaithRecord(
@@ -79,6 +82,7 @@ class FaithRecord {
       prayerMemo: prayerMemo ?? this.prayerMemo,
       fellowshipMemo: fellowshipMemo ?? this.fellowshipMemo,
       evangelismMemo: evangelismMemo ?? this.evangelismMemo,
+      bibleMemo: bibleMemo ?? this.bibleMemo,
       todos: todos ?? this.todos,
     );
   }
@@ -95,6 +99,7 @@ class FaithRecord {
       'prayerMemo': prayerMemo,
       'fellowshipMemo': fellowshipMemo,
       'evangelismMemo': evangelismMemo,
+      'bibleMemo': bibleMemo,
       'todos': todos.map((t) => t.toJson()).toList(),
     };
   }
@@ -115,6 +120,7 @@ class FaithRecord {
       prayerMemo: json['prayerMemo'] as String?,
       fellowshipMemo: json['fellowshipMemo'] as String?,
       evangelismMemo: json['evangelismMemo'] as String?,
+      bibleMemo: json['bibleMemo'] as String?,
       todos: todos,
     );
   }
