@@ -31,7 +31,7 @@ class _PrayerJournalScreenState extends State<PrayerJournalScreen> {
   @override
   void initState() {
     super.initState();
-    for (int i = 1; i <= 14; i++) {
+    for (int i = 1; i <= 13; i++) {
       _controllers['p$i'] = TextEditingController();
     }
     _initPrefs();
@@ -47,7 +47,7 @@ class _PrayerJournalScreenState extends State<PrayerJournalScreen> {
 
   void _loadData() {
     final dateStr = DateFormat('yyyy-MM-dd').format(_selectedDate);
-    for (int i = 1; i <= 14; i++) {
+    for (int i = 1; i <= 13; i++) {
       // Per-date key for persistence
       final key = 'prayer_journal_${dateStr}_p$i';
       
@@ -77,20 +77,7 @@ class _PrayerJournalScreenState extends State<PrayerJournalScreen> {
     super.dispose();
   }
 
-  Future<void> _pickDate() async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: _selectedDate,
-      firstDate: DateTime.now().subtract(const Duration(days: 365)),
-      lastDate: DateTime.now().add(const Duration(days: 365)),
-    );
-    if (picked != null && picked != _selectedDate) {
-      setState(() {
-        _selectedDate = picked;
-        _loadData();
-      });
-    }
-  }
+
 
   Widget _buildSectionTitle(String title, bool isDark) {
     return Container(
@@ -237,33 +224,13 @@ class _PrayerJournalScreenState extends State<PrayerJournalScreen> {
                   ),
                   const SizedBox(height: 20),
                   
-                  // Date Picker
-                  GestureDetector(
-                    onTap: _pickDate,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-                      decoration: BoxDecoration(
-                        color: isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: isDark ? const Color(0xFF334155) : const Color(0xFFF1F5F9),
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(LucideIcons.calendar, size: 16, color: Color(0xFF94A3B8)),
-                          const SizedBox(width: 8),
-                          Text(
-                            DateFormat('yyyy년 M월 d일').format(_selectedDate),
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: isDark ? Colors.white : const Color(0xFF0F172A),
-                            ),
-                          ),
-                        ],
-                      ),
+                  // Date Display
+                  Text(
+                    DateFormat('yyyy.MM.dd').format(DateTime.now()),
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
                     ),
                   ),
                   
@@ -313,10 +280,6 @@ class _PrayerJournalScreenState extends State<PrayerJournalScreen> {
                   _buildSectionTitle('4. 간구와 신앙 성장', isDark),
                   _buildTextField('p12', '개인적인 간구', '주님께 맡기는 제목...', isDark),
                   _buildTextField('p13', '자신의 신앙 성장을 위한 기도', '더 깊은 믿음을 위해...', isDark),
-
-                  // Memo
-                  _buildSectionTitle('MEMO', isDark),
-                  _buildTextField('p14', '기록', '오늘의 묵상, 받은 말씀, 영적 일기...', isDark, minLines: 6),
                 ],
               ),
             ),

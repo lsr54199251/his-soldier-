@@ -88,14 +88,6 @@ class _HomeScreenState extends State<HomeScreen> {
     widget.onUpdate(updated);
   }
 
-  int get _completedCount {
-    int count = 0;
-    if (_record.isWord) count++;
-    if (_record.isPrayer) count++;
-    if (_record.isFellowship) count++;
-    if (_record.isEvangelism) count++;
-    return count;
-  }
 
   void _addTodo() {
     final text = _todoController.text.trim();
@@ -420,78 +412,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ],
-        ),
-        const SizedBox(height: 12),
-        Container(
-          padding: const EdgeInsets.all(14),
-          decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF1E293B) : Colors.white,
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(
-              color: isDark ? const Color(0xFF334155) : const Color(0xFFF1F5F9),
-            ),
-            boxShadow: [
-              if (!isDark)
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, 2),
-                )
-            ],
-          ),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    '진행도',
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w900,
-                      color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
-                    ),
-                  ),
-                  Text(
-                    '4개 중 $_completedCount개 완료',
-                    style: const TextStyle(
-                      fontSize: 9,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF94A3B8),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 6),
-              LayoutBuilder(
-                builder: (context, constraints) {
-                  return ClipRRect(
-                    borderRadius: BorderRadius.circular(50),
-                    child: Container(
-                      height: 12,
-                      width: double.infinity,
-                      color: isDark
-                          ? const Color(0xFF1E3A8A).withOpacity(0.3)
-                          : const Color(0xFFDBEAFE),
-                      child: Row(
-                        children: [
-                          AnimatedContainer(
-                            duration: const Duration(milliseconds: 600),
-                            curve: Curves.easeOutCubic,
-                            width: constraints.maxWidth * (_record.completionRate / 100),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF3B82F6),
-                              borderRadius: BorderRadius.circular(50),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
         ),
       ],
     );
