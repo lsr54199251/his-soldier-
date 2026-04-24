@@ -38,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _record = widget.record;
     _selectedDate = DateTime.parse(_record.date);
     _bibleController.text = _record.bibleMemo ?? '';
-    
+
     _bibleFocus.addListener(() {
       if (!_bibleFocus.hasFocus) {
         if (_record.bibleMemo != _bibleController.text) {
@@ -92,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void _addTodo() {
     final text = _todoController.text.trim();
     if (text.isEmpty) return;
-    
+
     final newItem = CheckItem(id: const Uuid().v4(), text: text);
     final targetDateStr = DateFormat('yyyy-MM-dd').format(_selectedDate);
 
@@ -113,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       );
     }
-    
+
     _todoController.clear();
     setState(() {});
   }
@@ -581,7 +581,6 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 타이틀
           Row(
             children: [
               Container(
@@ -608,7 +607,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           const SizedBox(height: 20),
 
-          // 입력창 및 날짜 선택
           Row(
             children: [
               GestureDetector(
@@ -731,7 +729,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           const SizedBox(height: 16),
 
-          // 목록
           if (todos.isEmpty)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 24),
@@ -774,7 +771,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       child: Row(
         children: [
-          // 체크박스
           GestureDetector(
             onTap: () => _toggleTodo(todo.id),
             child: AnimatedContainer(
@@ -798,7 +794,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           const SizedBox(width: 12),
 
-          // 텍스트
           Expanded(
             child: Text(
               todo.text,
@@ -814,7 +809,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
 
-          // 위/아래/삭제 버튼
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
-import '../models/faith_record.dart';
+import '../../faith/models/faith_record.dart';
 
 class StatsScreen extends StatelessWidget {
   final List<FaithRecord> records;
@@ -25,16 +25,14 @@ class StatsScreen extends StatelessWidget {
     double avgRate = currentMonthRecords.isEmpty ? 0 : sum / currentMonthRecords.length;
     int loggedDays = currentMonthRecords.length;
 
-    // fl_chart requires spots
     List<FlSpot> spots = [];
     currentMonthRecords.sort((a, b) => a.date.compareTo(b.date));
-    double maxX = DateTime(now.year, now.month + 1, 0).day.toDouble(); // days in month
+    double maxX = DateTime(now.year, now.month + 1, 0).day.toDouble();
 
     for (var r in currentMonthRecords) {
       DateTime d = DateTime.parse(r.date);
       spots.add(FlSpot(d.day.toDouble(), r.completionRate));
     }
-    // ensure at least two points or a dummy point if totally empty to prevent errors
     if (spots.isEmpty) {
       spots = [FlSpot(1, 0), FlSpot(maxX, 0)];
     } else if (spots.length == 1) {
@@ -42,7 +40,7 @@ class StatsScreen extends StatelessWidget {
     }
 
     final chartRecords = currentMonthRecords.where((r) => r.completionRate > 0).toList()
-      ..sort((a, b) => b.date.compareTo(a.date)); // descending
+      ..sort((a, b) => b.date.compareTo(a.date));
 
     return Scaffold(
       backgroundColor: isDark ? const Color(0xFF020617) : const Color(0xFFF8FAFC),
@@ -197,10 +195,10 @@ class StatsScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             '이번 달 평균',
             style: TextStyle(
-              color: const Color(0xFFDBEAFE),
+              color: Color(0xFFDBEAFE),
               fontSize: 10,
               fontWeight: FontWeight.w500,
             ),

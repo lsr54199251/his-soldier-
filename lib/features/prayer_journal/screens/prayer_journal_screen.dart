@@ -48,10 +48,7 @@ class _PrayerJournalScreenState extends State<PrayerJournalScreen> {
   void _loadData() {
     final dateStr = DateFormat('yyyy-MM-dd').format(_selectedDate);
     for (int i = 1; i <= 13; i++) {
-      // Per-date key for persistence
       final key = 'prayer_journal_${dateStr}_p$i';
-      
-      // Check if there is data for today, otherwise fall back to global old keys if any (migration from HTML if we had one) or empty
       final value = _prefs.getString(key) ?? '';
       _controllers['p$i']!.text = value;
     }
@@ -76,8 +73,6 @@ class _PrayerJournalScreenState extends State<PrayerJournalScreen> {
     }
     super.dispose();
   }
-
-
 
   Widget _buildSectionTitle(String title, bool isDark) {
     return Container(
@@ -200,7 +195,6 @@ class _PrayerJournalScreenState extends State<PrayerJournalScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Header
                   Row(
                     children: [
                       Container(
@@ -223,8 +217,7 @@ class _PrayerJournalScreenState extends State<PrayerJournalScreen> {
                     ],
                   ),
                   const SizedBox(height: 20),
-                  
-                  // Date Display
+
                   Text(
                     DateFormat('yyyy.MM.dd').format(DateTime.now()),
                     style: TextStyle(
@@ -233,10 +226,9 @@ class _PrayerJournalScreenState extends State<PrayerJournalScreen> {
                       color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
                     ),
                   ),
-                  
+
                   const SizedBox(height: 16),
-                  
-                  // Quote
+
                   Container(
                     constraints: const BoxConstraints(minHeight: 48),
                     alignment: Alignment.center,
@@ -252,23 +244,20 @@ class _PrayerJournalScreenState extends State<PrayerJournalScreen> {
                       ),
                     ),
                   ),
-                  
+
                   const SizedBox(height: 24),
                   const Divider(),
 
-                  // Section 1
                   _buildSectionTitle('1. 찬양과 감사', isDark),
                   _buildTextField('p1', '찬양 부름', '찬양 가사나 고백 한 줄...', isDark),
                   _buildTextField('p2', '영혼 구원에 대한 감사', '구원하신 은혜에 대하여...', isDark),
                   _buildTextField('p3', '기도 응답에 대한 감사', '오늘의 구체적인 감사...', isDark),
 
-                  // Section 2
                   _buildSectionTitle('2. 자복과 회개', isDark),
                   _buildTextField('p4', '고범죄(알고 지은 죄)에 대한 자복/통회', '통회하는 마음으로...', isDark),
                   _buildTextField('p5', '부지불식간(모르고 지은 죄)의 자백', '연약함을 고백합니다...', isDark),
                   _buildTextField('p6', '선악간의 죄 / 상처 준 형제자매 용서', '주님의 마음으로 품습니다...', isDark),
 
-                  // Section 3
                   _buildSectionTitle('3. 중보 기도', isDark),
                   _buildTextField('p7', '전도집회 및 교회 행사', '사역의 열매를 위해...', isDark),
                   _buildTextField('p8', '교구, 구역, 전국·해외 교회', '교회 공동체를 위해...', isDark),
@@ -276,7 +265,6 @@ class _PrayerJournalScreenState extends State<PrayerJournalScreen> {
                   _buildTextField('p10', '기도 부탁 / 조용히 중보할 이들', '함께 짐을 지는 마음으로...', isDark),
                   _buildTextField('p11', '직분자 및 가족 기도', '강건함과 평안을 위해...', isDark),
 
-                  // Section 4
                   _buildSectionTitle('4. 간구와 신앙 성장', isDark),
                   _buildTextField('p12', '개인적인 간구', '주님께 맡기는 제목...', isDark),
                   _buildTextField('p13', '자신의 신앙 성장을 위한 기도', '더 깊은 믿음을 위해...', isDark),

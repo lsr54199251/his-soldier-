@@ -24,18 +24,17 @@ class GraceProvider with ChangeNotifier {
     if (_isInitialized) return;
     try {
       final prefs = await SharedPreferences.getInstance();
-      
+
       _streak = prefs.getInt(_keyStreak) ?? 0;
-      
+
       final String? statusJson = prefs.getString(_keyStatus);
       final todayStr = DateFormat('yyyy-MM-dd').format(DateTime.now());
-      
+
       if (statusJson != null) {
         final loadedStatus = GraceTodayStatus.fromJson(jsonDecode(statusJson));
         if (loadedStatus.date == todayStr) {
           _todayStatus = loadedStatus;
         } else {
-          // New day
           _todayStatus = GraceTodayStatus(date: todayStr);
           await _saveStatus(prefs);
         }
@@ -52,7 +51,7 @@ class GraceProvider with ChangeNotifier {
     } catch (e) {
       debugPrint("Error initializing GraceProvider: $e");
     }
-    
+
     _isInitialized = true;
     notifyListeners();
   }
@@ -75,7 +74,6 @@ class GraceProvider with ChangeNotifier {
 
     final prefs = await SharedPreferences.getInstance();
 
-    // Update status
     if (type == 'morning') {
       _todayStatus = _todayStatus.copyWith(morningDone: true);
     } else {
@@ -85,7 +83,6 @@ class GraceProvider with ChangeNotifier {
     }
     await _saveStatus(prefs);
 
-    // Update history
     final newRoutine = GraceRoutine(
       id: const Uuid().v4(),
       type: type,
@@ -95,7 +92,7 @@ class GraceProvider with ChangeNotifier {
       concern: data['concern'],
       reflection: data['reflection'],
     );
-    
+
     _history.add(newRoutine);
     await _saveHistory(prefs);
 

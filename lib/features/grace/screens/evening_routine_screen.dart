@@ -31,7 +31,7 @@ class _EveningRoutineScreenState extends State<EveningRoutineScreen> {
   void _nextStep() {
     final key = _steps[_step]['key'];
     _data[key] = _controller.text;
-    
+
     if (_step < 2) {
       setState(() {
         _step++;
@@ -61,7 +61,6 @@ class _EveningRoutineScreenState extends State<EveningRoutineScreen> {
           padding: const EdgeInsets.all(24.0),
           child: Column(
             children: [
-              // Header
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -90,19 +89,16 @@ class _EveningRoutineScreenState extends State<EveningRoutineScreen> {
                 ],
               ),
               const SizedBox(height: 48),
-              
-              // Icon
+
               Icon(current['icon'], size: 48, color: current['color']),
               const SizedBox(height: 24),
-              
-              // Title & Desc
+
               Text(current['title'], style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
               const SizedBox(height: 8),
               Text(current['desc'], style: const TextStyle(color: Color(0xFF64748B))),
-              
+
               const SizedBox(height: 32),
-              
-              // Input
+
               Expanded(
                 child: TextField(
                   controller: _controller,
@@ -128,7 +124,7 @@ class _EveningRoutineScreenState extends State<EveningRoutineScreen> {
                   ),
                 ),
               ),
-              
+
               if (_step == 2) ...[
                 const SizedBox(height: 24),
                 SizedBox(
