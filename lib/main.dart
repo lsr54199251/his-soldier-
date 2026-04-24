@@ -10,16 +10,21 @@ import 'screens/home_screen.dart';
 import 'screens/stats_screen.dart';
 import 'screens/history_screen.dart';
 import 'screens/prayer_journal_screen.dart';
+import 'screens/grace/grace_main_screen.dart';
+import 'providers/grace_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final faithProvider = FaithProvider();
   await faithProvider.initialize();
+  final graceProvider = GraceProvider();
+  await graceProvider.initialize();
 
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider<FaithProvider>.value(value: faithProvider),
+        ChangeNotifierProvider<GraceProvider>.value(value: graceProvider),
       ],
       child: const HisSoldierApp(),
     ),
@@ -475,8 +480,10 @@ class _MainLayoutState extends State<MainLayout> {
         onMemoOpen: (keyStr, record) => _showMemoBottomSheet(record, keyStr),
       );
     } else if (_currentIndex == 1) {
-      currentScreen = const PrayerJournalScreen();
+      currentScreen = const GraceMainScreen();
     } else if (_currentIndex == 2) {
+      currentScreen = const PrayerJournalScreen();
+    } else if (_currentIndex == 3) {
       currentScreen = StatsScreen(records: faithProvider.records);
     } else {
       currentScreen = HistoryScreen(
@@ -488,37 +495,49 @@ class _MainLayoutState extends State<MainLayout> {
       );
     }
 
-    return Scaffold(
-      body: Stack(
-        children: [
-          AnimatedSwitcher(
-            duration: const Duration(milliseconds: 200),
-            transitionBuilder: (Widget child, Animation<double> animation) {
-              return SlideTransition(
-                position: Tween<Offset>(
-                  begin: const Offset(0.05, 0),
-                  end: Offset.zero,
-                ).animate(animation),
-                child: FadeTransition(
-                  opacity: animation,
-                  child: child,
-                ),
-              );
-            },
-            child: SizedBox(
-              key: ValueKey<int>(_currentIndex),
-              width: double.infinity,
-              height: double.infinity,
-              child: currentScreen,
+    return PopScope(
+      canPop: _currentIndex == 0,
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) {
+          if (_currentIndex != 0) {
+            setState(() {
+              _currentIndex = 0;
+            });
+          }
+        }
+      },
+      child: Scaffold(
+        body: Stack(
+          children: [
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+              transitionBuilder: (Widget child, Animation<double> animation) {
+                return SlideTransition(
+                  position: Tween<Offset>(
+                    begin: const Offset(0.05, 0),
+                    end: Offset.zero,
+                  ).animate(animation),
+                  child: FadeTransition(
+                    opacity: animation,
+                    child: child,
+                  ),
+                );
+              },
+              child: SizedBox(
+                key: ValueKey<int>(_currentIndex),
+                width: double.infinity,
+                height: double.infinity,
+                child: currentScreen,
+              ),
             ),
-          ),
-          Positioned(
-            bottom: 16,
-            left: 20,
-            right: 20,
-            child: _buildBottomNav(isDark),
-          ),
-        ],
+            Positioned(
+              bottom: 16,
+              left: 20,
+              right: 20,
+              child: _buildBottomNav(isDark),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -547,9 +566,10 @@ class _MainLayoutState extends State<MainLayout> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           _buildNavItem(0, LucideIcons.home, '홈', isDark),
-          _buildNavItem(1, LucideIcons.book, '기도수첩', isDark),
-          _buildNavItem(2, LucideIcons.barChart2, '통계', isDark),
-          _buildNavItem(3, LucideIcons.history, '히스토리', isDark),
+          _buildNavItem(1, LucideIcons.heart, '그레이스', isDark),
+          _buildNavItem(2, LucideIcons.book, '기도수첩', isDark),
+          _buildNavItem(3, LucideIcons.barChart2, '통계', isDark),
+          _buildNavItem(4, LucideIcons.history, '히스토리', isDark),
         ],
       ),
     );
