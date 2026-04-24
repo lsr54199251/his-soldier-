@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'dart:math';
 
 class MorningRoutineScreen extends StatefulWidget {
   final VoidCallback onComplete;
@@ -75,7 +74,6 @@ class _MorningRoutineScreenState extends State<MorningRoutineScreen> {
           padding: const EdgeInsets.all(24.0),
           child: Column(
             children: [
-              // Header
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -91,21 +89,19 @@ class _MorningRoutineScreenState extends State<MorningRoutineScreen> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  const SizedBox(width: 48), // balance
+                  const SizedBox(width: 48),
                 ],
               ),
               const SizedBox(height: 48),
-              
-              // Title
+
               const Text('아침 기도: 10분', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
               const SizedBox(height: 8),
-              const Text('평안한 마음으로 오늘 하루의 시작을 기도로 채워보세요.', 
+              const Text('평안한 마음으로 오늘 하루의 시작을 기도로 채워보세요.',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Color(0xFF64748B))),
-              
+
               const Spacer(),
-              
-              // Timer Circle
+
               SizedBox(
                 width: 240,
                 height: 240,
@@ -134,10 +130,9 @@ class _MorningRoutineScreenState extends State<MorningRoutineScreen> {
                   ],
                 ),
               ),
-              
+
               const SizedBox(height: 48),
-              
-              // Play/Pause
+
               OutlinedButton(
                 onPressed: _toggleTimer,
                 style: OutlinedButton.styleFrom(
@@ -146,13 +141,12 @@ class _MorningRoutineScreenState extends State<MorningRoutineScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
                   foregroundColor: const Color(0xFF6366F1),
                 ),
-                child: Text(_isActive ? '잠시 멈춤' : _timer == INITIAL_TIME ? '기도 시작' : _timer == 0 ? '기도 완료' : '다시 계속', 
+                child: Text(_isActive ? '잠시 멈춤' : _timer == INITIAL_TIME ? '기도 시작' : _timer == 0 ? '기도 완료' : '다시 계속',
                   style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
               ),
-              
+
               const Spacer(),
-              
-              // Finish Button
+
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(

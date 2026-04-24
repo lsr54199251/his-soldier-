@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:intl/intl.dart';
 
-import '../../providers/grace_provider.dart';
+import '../providers/grace_provider.dart';
 import 'morning_routine_screen.dart';
 import 'evening_routine_screen.dart';
 
@@ -19,7 +19,7 @@ class _GraceMainScreenState extends State<GraceMainScreen> {
 
   Widget _buildHomeContent(BuildContext context, GraceProvider provider, bool isDark) {
     final todayStatus = provider.todayStatus;
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -60,7 +60,7 @@ class _GraceMainScreenState extends State<GraceMainScreen> {
           ),
         ),
         const SizedBox(height: 24),
-        
+
         // Streak Card
         Container(
           padding: const EdgeInsets.all(24),
@@ -108,9 +108,9 @@ class _GraceMainScreenState extends State<GraceMainScreen> {
             ],
           ),
         ),
-        
+
         const SizedBox(height: 24),
-        
+
         // Morning Routine Button
         _buildRoutineButton(
           title: '아침 기도',
@@ -126,9 +126,9 @@ class _GraceMainScreenState extends State<GraceMainScreen> {
             }
           },
         ),
-        
+
         const SizedBox(height: 16),
-        
+
         // Evening Routine Button
         _buildRoutineButton(
           title: '저녁 기도',
@@ -164,8 +164,8 @@ class _GraceMainScreenState extends State<GraceMainScreen> {
         duration: const Duration(milliseconds: 300),
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: isDone 
-            ? (isDark ? const Color(0xFF1E293B).withOpacity(0.5) : const Color(0xFFF1F5F9)) 
+          color: isDone
+            ? (isDark ? const Color(0xFF1E293B).withOpacity(0.5) : const Color(0xFFF1F5F9))
             : (isDark ? const Color(0xFF1E293B) : Colors.white),
           borderRadius: BorderRadius.circular(24),
           border: Border.all(color: isDone ? Colors.transparent : (isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0))),
@@ -214,11 +214,6 @@ class _GraceMainScreenState extends State<GraceMainScreen> {
                 ],
               ),
             ),
-            if (!isDone)
-              const Padding(
-                padding: EdgeInsets.only(left: 12),
-                child: Icon(LucideIcons.arrowRight, color: Color(0xFFCBD5E1), size: 18),
-              )
           ],
         ),
       ),
@@ -230,7 +225,6 @@ class _GraceMainScreenState extends State<GraceMainScreen> {
     bool isDark = Theme.of(context).brightness == Brightness.dark;
     final provider = Provider.of<GraceProvider>(context);
 
-    // If a routine is active, show it full screen
     if (_activeRoutine == 'morning') {
       return MorningRoutineScreen(
         onCancel: () => setState(() => _activeRoutine = null),
@@ -254,7 +248,7 @@ class _GraceMainScreenState extends State<GraceMainScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 100), // extra padding for bottom nav
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),
             child: Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(

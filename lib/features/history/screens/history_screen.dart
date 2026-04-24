@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import '../models/faith_record.dart';
+import '../../faith/models/faith_record.dart';
 
 class HistoryScreen extends StatefulWidget {
   final List<FaithRecord> records;
@@ -126,10 +126,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
-                color: day == '일' 
+                color: day == '일'
                     ? const Color(0xFFEF4444)
-                    : day == '토' 
-                        ? const Color(0xFF3B82F6) 
+                    : day == '토'
+                        ? const Color(0xFF3B82F6)
                         : (isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B)),
               ),
             ),
@@ -249,7 +249,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 ),
               ),
             if (!hasTodos)
-              const SizedBox(height: 8), // Placeholder to keep height consistent
+              const SizedBox(height: 8),
           ],
         ),
       ),

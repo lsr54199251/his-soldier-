@@ -16,14 +16,14 @@ class FaithProvider with ChangeNotifier {
 
   Future<void> initialize() async {
     if (_isInitialized || _isLoading) return;
-    
+
     _isLoading = true;
     debugPrint("Initializing FaithProvider...");
     await _loadRecords();
-    
+
     // Set initialized to true BEFORE creating today's record so save works
     _isInitialized = true;
-    
+
     // Ensure today's record exists
     final todayStr = DateFormat('yyyy-MM-dd').format(DateTime.now());
     if (!_records.any((r) => r.date == todayStr)) {
@@ -34,7 +34,7 @@ class FaithProvider with ChangeNotifier {
       ));
       await _saveRecords();
     }
-    
+
     _isLoading = false;
     notifyListeners();
     debugPrint("FaithProvider initialized with ${_records.length} records.");
@@ -65,7 +65,6 @@ class FaithProvider with ChangeNotifier {
       }
     } catch (e) {
       debugPrint("Fatal error loading records: $e");
-      // Keep _records as is (empty list if first run) to avoid overwriting with nothing if possible
     }
   }
 
@@ -94,23 +93,19 @@ class FaithProvider with ChangeNotifier {
   FaithRecord getRecordForDate(DateTime date) {
     final dateStr = DateFormat('yyyy-MM-dd').format(date);
 
-    // Search for existing record
     final index = _records.indexWhere((r) => r.date == dateStr);
 
     if (index != -1) {
       return _records[index];
     }
 
-    // Create new if not found
     final newRecord = FaithRecord(
       id: const Uuid().v4(),
       date: dateStr,
     );
 
-    // Use addPostFrameCallback or microtask to avoid building warning
-    // However, since we are adding to the list, we should be careful.
     _records.add(newRecord);
-    _saveRecords(); // Background save is fine here as it's a new record
+    _saveRecords();
 
     return newRecord;
   }
@@ -125,7 +120,7 @@ class FaithProvider with ChangeNotifier {
       _records.add(record);
     }
 
-    notifyListeners(); // Notify UI immediately for responsiveness
-    await _saveRecords(); // Wait for save to complete
+    notifyListeners();
+    await _saveRecords();
   }
 }
