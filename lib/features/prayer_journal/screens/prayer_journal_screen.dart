@@ -15,6 +15,8 @@ class _PrayerJournalScreenState extends State<PrayerJournalScreen> {
   late SharedPreferences _prefs;
   bool _isLoading = true;
 
+  static const String _keyLastDate = 'prayer_journal_last_date';
+
   final List<String> _quotes = [
     "기도는 아침의 열쇠이고 밤의 자물쇠입니다",
     "기도 없는 하루는 은혜와 축복이 없는 하루이며, 기도 없는 일생은 주님의 도우심과 인도가 없는 일생입니다",
@@ -47,10 +49,27 @@ class _PrayerJournalScreenState extends State<PrayerJournalScreen> {
 
   void _loadData() {
     final dateStr = DateFormat('yyyy-MM-dd').format(_selectedDate);
+
+    bool todayHasData = false;
     for (int i = 1; i <= 13; i++) {
-      final key = 'prayer_journal_${dateStr}_p$i';
-      final value = _prefs.getString(key) ?? '';
-      _controllers['p$i']!.text = value;
+      if ((_prefs.getString('prayer_journal_${dateStr}_p$i') ?? '').isNotEmpty) {
+        todayHasData = true;
+        break;
+      }
+    }
+
+    // 오늘 데이터가 없으면 마지막으로 기록한 날의 내용을 불러옴
+    String sourceDate = dateStr;
+    if (!todayHasData) {
+      final lastDate = _prefs.getString(_keyLastDate);
+      if (lastDate != null && lastDate != dateStr) {
+        sourceDate = lastDate;
+      }
+    }
+
+    for (int i = 1; i <= 13; i++) {
+      final key = 'prayer_journal_${sourceDate}_p$i';
+      _controllers['p$i']!.text = _prefs.getString(key) ?? '';
     }
   }
 
@@ -59,6 +78,8 @@ class _PrayerJournalScreenState extends State<PrayerJournalScreen> {
     final dateStr = DateFormat('yyyy-MM-dd').format(_selectedDate);
     final key = 'prayer_journal_${dateStr}_$id';
     _prefs.setString(key, value);
+    // 오늘 날짜를 마지막 기록 날짜로 업데이트
+    _prefs.setString(_keyLastDate, dateStr);
   }
 
   String _getQuote() {
