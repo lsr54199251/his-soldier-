@@ -1,4 +1,4 @@
-# His Soldier (그리스도의 군사) 🛡️
+cd# His Soldier (그리스도의 군사) 🛡️
 
 '수레바퀴의 삶(The Wheel Illustration)' 원리에 기초한 영적 훈련 기록 애플리케이션
 
